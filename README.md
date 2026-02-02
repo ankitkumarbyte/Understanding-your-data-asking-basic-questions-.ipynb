@@ -1,114 +1,98 @@
-# 📊 DataFrame Correlation Error – README
+# 📘 Understanding Your Data – Asking Basic Questions
 
-## ❓ Problem Description
+## 📌 Project Overview
 
-While performing exploratory data analysis, the following command was executed:
+This repository contains a Jupyter Notebook focused on **Exploratory Data Analysis (EDA)**.
+The goal of the notebook is to understand the structure, quality, and basic statistical
+properties of the dataset before applying any machine learning models.
 
-    df.corr()
-
-This resulted in the error:
-
-    ValueError: could not convert string to float: 'Braund, Mr. Owen Harris'
-
----
-
-## 🔍 Root Cause
-
-The `df.corr()` function in **pandas** computes correlation **only on numeric data**.
-
-However, the DataFrame contains **non-numeric (string/object) columns**, such as:
-
-- Names
-- Text labels
-- Categorical strings
-
-Example problematic value:
-
-    'Braund, Mr. Owen Harris'
-
-Pandas attempts to convert all columns to floating-point numbers for correlation.
-When it encounters text data, the conversion fails and raises a `ValueError`.
+Notebook file:
+- `Understanding_your_data_(asking_basic_questions).ipynb`
 
 ---
 
-## 🧠 Why This Happens
+## 🎯 Objectives of the Notebook
 
-- Correlation is a **mathematical operation**
-- Mathematical correlation **cannot be computed on strings**
-- Text columns must be excluded or encoded before analysis
+The notebook answers fundamental questions such as:
 
----
-
-## ✅ Recommended Solution (Best Practice)
-
-### Use only numeric columns for correlation
-
-    df_numeric = df.select_dtypes(include='number')
-    df_numeric.corr()
-
-✔ This automatically removes all non-numeric columns  
-✔ Safe, clean, and research-standard approach  
+- What are the available features in the dataset?
+- What data types do these features have?
+- Which features are numeric vs non-numeric?
+- Are there missing values?
+- How are numeric features related to each other?
 
 ---
 
-## ⚡ Quick Fix (If Supported by Pandas Version)
+## 🔍 Correlation Analysis
 
-    df.corr(numeric_only=True)
+During EDA, correlation analysis was performed using:
 
-⚠️ Works only in newer pandas versions.
 
----
+### ⚠️ Observed Issue
 
-## 🔎 Debugging Tip
+The above command raised the following error:
 
-To inspect column data types:
-
-    df.dtypes
-
-Look for columns with type:
-
-- `object`
-- `string`
-- `category`
-
-These should not be used directly in correlation analysis.
 
 ---
 
-## 🚫 What NOT to Do
+## 🧠 Explanation
 
-Do NOT force convert the entire DataFrame to float:
+- Correlation is a **mathematical operation** that is defined only for numeric values.
+- The dataset contains **non-numeric columns** (e.g., names or categorical text).
+- When `df.corr()` encounters text data, pandas attempts to convert it to float,
+  which leads to a conversion error.
 
-    df.astype(float)
-
-❌ This will crash again if text exists  
-❌ Incorrect statistical practice  
-
----
-
-## 🧪 If Text Columns Are Important (Optional)
-
-If categorical/text data is meaningful, encode it **before** analysis.
-
-Example:
-
-    from sklearn.preprocessing import LabelEncoder
-
-    le = LabelEncoder()
-    df['Name_encoded'] = le.fit_transform(df['Name'])
-
-    df[['Name_encoded', 'Age', 'Fare']].corr()
-
-⚠️ Only apply encoding when it makes semantic sense.
+This behavior is expected and indicates mixed data types in the dataset.
 
 ---
 
-## 📌 Summary
+## ✅ Correct Approach
 
-- `df.corr()` works **only with numeric data**
-- Text columns cause conversion errors
-- Always filter numeric columns before correlation
-- This is expected behavior, not a bug
+To compute correlation correctly, only numeric columns should be used.
+
+### Recommended solution:
+
+
+This ensures:
+- Only numerical features are included
+- The correlation matrix is computed correctly
+- The analysis follows standard data science practices
 
 ---
 
+## 🔎 Data Type Inspection
+
+To understand why the error occurs, data types can be checked using:
+
+
+Columns with `object` or `string` data types are excluded from correlation analysis.
+
+---
+
+## 📌 Key Takeaways
+
+- Exploratory Data Analysis is essential before modeling
+- Not all features are suitable for statistical operations
+- Numeric and non-numeric data must be handled differently
+- Proper filtering of features prevents analytical errors
+
+---
+
+## 🛠 Tools & Libraries Used
+
+- Python
+- Pandas
+- Jupyter Notebook
+
+---
+
+## ✅ Conclusion
+
+This notebook demonstrates the importance of understanding data structure
+and data types during the early stages of analysis. Handling numeric and
+categorical features correctly leads to more reliable and interpretable results.
+
+---
+
+📎 This repository is intended for learning, EDA practice, and foundational
+data analysis workflows.
